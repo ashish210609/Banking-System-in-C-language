@@ -1,0 +1,208 @@
+#include <stdio.h>
+struct bank
+{
+char holder_name[50];
+int account_no;
+float balance;
+};
+
+struct bank accounts[100];
+int total_accounts = 0;
+
+
+void new_account()
+{
+printf("\nEnter account holder name: ");
+scanf(" %[^\n]", accounts[total_accounts].holder_name);
+
+accounts[total_accounts].account_no = 1001 + total_accounts;
+
+printf("Enter initial balance: ");
+scanf("%f", &accounts[total_accounts].balance);
+
+printf("\nAccount created successfully!");
+printf("\nAccount Number: %d",
+accounts[total_accounts].account_no);
+
+total_accounts++;
+}
+
+void moneyaddition()
+{
+int acc, i;
+float amount;
+
+printf("\nEnter account number: ");
+scanf("%d", &acc);
+
+for(i = 0; i < total_accounts; i++)
+{
+if(accounts[i].account_no == acc)
+{
+printf("Enter amount to deposit: ");
+scanf("%f", &amount);
+
+if(amount > 0)
+{
+accounts[i].balance += amount;
+printf("Money deposited successfully!");
+printf("\nNew Balance: %.2f",
+accounts[i].balance);
+}
+else
+{
+printf("Invalid amount!");
+}
+
+return;
+}
+}
+
+printf("Account not found!");
+}
+
+
+void moneywithdraw()
+{
+int acc, i;
+float amount;
+
+printf("\nEnter account number: ");
+scanf("%d", &acc);
+
+for(i = 0; i < total_accounts; i++)
+{
+if(accounts[i].account_no == acc)
+{
+printf("Enter withdrawal amount: ");
+scanf("%f", &amount);
+
+if(amount <= 0)
+{
+printf("Invalid amount!");
+}
+else if(amount <= accounts[i].balance)
+{
+accounts[i].balance -= amount;
+
+printf("Withdrawal successful!");
+printf("\nRemaining Balance: %.2f",
+accounts[i].balance);
+}
+else
+{
+printf("Insufficient balance!");
+}
+
+return;
+}
+}
+
+printf("Account not found!");
+}
+
+
+void money_transfer()
+{
+int sender, receiver, i, j;
+float amount;
+
+printf("\nEnter sender account number: ");
+scanf("%d", &sender);
+
+printf("Enter receiver account number: ");
+scanf("%d", &receiver);
+
+i = -1;
+j = -1;
+
+for(int k = 0; k < total_accounts; k++)
+{
+if(accounts[k].account_no == sender)
+i = k;
+
+if(accounts[k].account_no == receiver)
+j = k;
+}
+
+if(i == -1 || j == -1)
+{
+printf("Account not found!");
+return;
+}
+
+if(i == j)
+{
+printf("Cannot transfer to the same account!");
+return;
+}
+
+printf("Enter transfer amount: ");
+scanf("%f", &amount);
+
+if(amount <= 0)
+{
+printf("Invalid amount!");
+}
+else if(amount > accounts[i].balance)
+{
+printf("Insufficient balance!");
+}
+else
+{
+accounts[i].balance -= amount;
+accounts[j].balance += amount;
+
+printf("\nTransfer successful!");
+printf("\nSender balance: %.2f", accounts[i].balance);
+printf("\nReceiver balance: %.2f", accounts[j].balance);
+}
+}
+
+
+int main()
+{
+int choice;
+
+do
+{
+printf("\n\n===== BANK MANAGEMENT SYSTEM =====");
+printf("\n1. Create New Account");
+printf("\n2. Deposit Money");
+printf("\n3. Withdraw Money");
+printf("\n4. Money Transfer");
+printf("\n5. Exit");
+
+printf("\n\nEnter your choice: ");
+scanf("%d", &choice);
+
+switch(choice)
+{
+case 1:
+new_account();
+break;
+
+case 2:
+moneyaddition();
+break;
+
+case 3:
+moneywithdraw();
+break;
+
+case 4:
+money_transfer();
+break;
+
+case 5:
+printf("\nThank you for using our bank!");
+break;
+
+default:
+printf("\nInvalid choice!");
+}
+
+} while(choice != 5);
+
+return 0;
+}
